@@ -1,0 +1,130 @@
+﻿<%@ Master Language="VB" AutoEventWireup="false" CodeFile="Site.master.vb" Inherits="Site" %>
+
+<%@ Register assembly="Telerik.Web.UI" namespace="Telerik.Web.UI" tagprefix="telerik" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<link href="fonts/font.css" rel="stylesheet" /> 
+
+     <link rel="shortcut icon" type="image/ico" href="/icon.ico" />
+    <link rel="icon" type="image/ico" href="/icon.ico" />
+    <link rel="apple-touch-icon" type="image/ico" href="/icon.ico" />
+ 
+  <title>معرض ابوسيفين و تماف إيرينى للأدوات الصحية  </title>
+ 
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server"></asp:ContentPlaceHolder>
+
+  <link href="Styles/Abo_Site.css" rel="stylesheet" type="text/css" />
+  <link href="Styles/fontAwsome.css" rel="stylesheet" type="text/css" />
+ 
+           <script type = "text/javascript">
+
+
+               function checkKeyCode(evt) {
+
+                   var evt = (evt) ? evt : ((event) ? event : null);
+                   var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null);
+                   if (event.keyCode == 116) {
+                       evt.keyCode = 0;
+                       return false
+                   }
+               }
+               document.onkeydown = checkKeyCode; 
+          </script>
+
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+
+</head>
+<body>
+
+<form id="form1" runat="server" >
+
+
+<div id="mySidenav" class="sidenav" dir="rtl">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+ <telerik:RadTreeView ID="RadTreeView2" Runat="server" 
+        DataFieldID="CODE" DataFieldParentID="PARENTCODE" DataNavigateUrlField="URL" 
+        DataSourceID="SqlDataSource1" DataTextField="DESCRIPTION" 
+        Font-Bold="False">
+        <ExpandAnimation Type="OutQuad" />
+    </telerik:RadTreeView>
+<asp:Button CssClass="btntt"  ID="Button1"  runat="server" Text="خروج" 
+        Width="100%"/>
+</div>
+
+<div class="header" id="myHeader">
+<div  id="main_menu" class="col-3 col-s-12"  style="background-color: #673492;" 
+        dir="rtl">
+<span style="font-size:24px;cursor:pointer;color: white; vertical-align: middle;" 
+    onclick="openNav()">
+   <%-- &#9776;--%>
+    <asp:Image ID="Image1" runat="server" ImageUrl="~/images/logo_circle.png" ImageAlign="Middle" /> 
+     أبوسيفين و تماف إيرينى</span>
+</div>
+</div>
+
+<div class="col-3 col-s-12 main_content">
+  <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
+</div>
+
+<div class="footer">
+<telerik:RadStyleSheetManager ID="RadStyleSheetManager1" Runat="server"></telerik:RadStyleSheetManager>
+<telerik:RadScriptManager ID="RadScriptManager1" runat="server"></telerik:RadScriptManager>
+
+<asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:Abosefen_OPRConnectionString %>" 
+SelectCommand="SELECT HR.OPERATOR.NUMBER, HR.OPERATOR.NAME, HR.OPERATOR.PASSWORD, HR.AUTHORITY.OPERATORNUMBER, HR.APPLICATION.DESCRIPTION, HR.APPLICATION.LEVEL, HR.APPLICATION.CODE, CASE WHEN HR.APPLICATION.LEVEL = 1 THEN NULL ELSE HR.APPLICATION.PARENTCODE END AS PARENTCODE, HR.APPLICATION.URL, HR.APPLICATION.SYSTEMCODE FROM HR.OPERATOR INNER JOIN HR.AUTHORITY ON HR.OPERATOR.NUMBER = HR.AUTHORITY.OPERATORNUMBER INNER JOIN HR.APPLICATION ON HR.AUTHORITY.APPLICATIONCODE = HR.APPLICATION.CODE WHERE (HR.OPERATOR.STATUS = 1) AND (HR.AUTHORITY.ACCESSCODE = N'1') AND (HR.APPLICATION.ACCESSFLAG = N'1') GROUP BY HR.OPERATOR.NUMBER, HR.OPERATOR.NAME, HR.OPERATOR.PASSWORD, HR.AUTHORITY.OPERATORNUMBER, HR.APPLICATION.DESCRIPTION, HR.APPLICATION.LEVEL, HR.APPLICATION.CODE, HR.APPLICATION.PARENTCODE, HR.APPLICATION.URL, HR.APPLICATION.SYSTEMCODE, HR.APPLICATION.[ORDER] HAVING (HR.OPERATOR.NAME = @NAME) AND (HR.OPERATOR.PASSWORD = @PASSWORD) ORDER BY HR.APPLICATION.[ORDER]">
+<SelectParameters>
+<asp:SessionParameter Name="NAME" SessionField="USERNAME" />
+<asp:SessionParameter Name="PASSWORD" SessionField="PASS" />
+</SelectParameters>
+</asp:SqlDataSource>
+
+<telerik:RadAjaxManager ID="RadAjaxManager1" runat="server" Visible="False"></telerik:RadAjaxManager>
+</div>
+
+<script>
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+    function openNav_extra() {
+        document.getElementById("mySidenav_extra").style.width = "250px";
+    }
+
+    function closeNav_extra() {
+        document.getElementById("mySidenav_extra").style.width = "0";
+    }
+
+    window.onscroll = function () { myFunction() };
+
+    var header = document.getElementById("myHeader");
+    var sticky = header.offsetTop;
+    function myFunction() {
+        if (window.pageYOffset > sticky) {
+            header.classList.add("sticky");
+        } else {
+            header.classList.remove("sticky");
+        }
+
+    }
+
+
+</script>
+   
+
+</form>    
+
+
+</body>
+
+
+</html>
